@@ -1,3 +1,4 @@
+from datetime import date
 from pprint import pprint
 
 from flask import request, jsonify
@@ -6,6 +7,7 @@ from flask_restful import Resource
 
 from passlib.hash import pbkdf2_sha256 as sha256
 
+from models.approvals import Approvals
 from models.members import Members
 from models.revokedTokens import RevokedTokens
 from utils.decorator import departmentHead_required, members_required
@@ -67,10 +69,10 @@ class MemberLogin(Resource):
             refresh_token = create_refresh_token(identity=str(current_member['id']), additional_claims={"roles": "member"})
 
             return {
-                'message': 'Logged in as {}'.format(current_member.name),
-                'access_token': access_token,
-                'refresh_token': refresh_token
-            }, 200
+                       'message': 'Logged in as {}'.format(current_member.name),
+                       'access_token': access_token,
+                       'refresh_token': refresh_token
+                   }, 200
         else:
             return {'message': 'Wrong credentials'}, 401
 
@@ -101,3 +103,49 @@ class MemberInfo(Resource):
             "name": current_member["name"],
             "email": current_member["email"]
         }
+
+
+class ApprovalSubmit(Resource):
+    @jwt_required()
+    @members_required
+    def post(self):
+        data = request.get_json(force=True)
+        current_id = get_jwt_identity()
+
+        approval = []
+
+        # print(type(data["departments"]))
+
+        departments = []
+
+
+        # departments = data["departments"]
+        for department in departments:
+            approval.append(0)
+
+        # print(departments)
+        # print(approval)
+
+        todays_date = date.today()
+        todays_date = todays_date.strftime("%b %d, %Y")
+
+        try:
+            new_approval = Approvals(
+                title=data["title"],
+                description=data["description"],
+                filepath=data["filepath"],
+                member_id=current_id,
+                departments=departments,
+                approval=approval,
+                created_date=todays_date
+            )
+
+            new_approval.save()
+
+            return {
+                'message': 'Approval created successfully'
+            }
+
+        except Exception as e:
+            print(f"Got error while creating approval -: {e}")
+            return {'message': 'Something went wrong'}, 500

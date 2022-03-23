@@ -1,3 +1,4 @@
+import json
 from pprint import pprint
 
 from flask import request, jsonify
@@ -97,6 +98,26 @@ class CitizenInfo(Resource):
         }
 
 
+class AllQueries(Resource):
+    @jwt_required()
+    @citizen_required
+    def get(self):
+        current_id = get_jwt_identity()
+        all_queries = Queries.objects(citizen_id=str(current_id))
+        all_queries = json.loads(all_queries.to_json())
+
+        data = []
+
+        for query in all_queries:
+            data.append({
+                "department_id": query["department_id"],
+                "title": query['title'],
+                "description": query['description']
+            })
+
+        return {"data": data}, 200
+
+
 class QuerySubmit(Resource):
     @jwt_required()
     @citizen_required
@@ -111,14 +132,15 @@ class QuerySubmit(Resource):
                 citizen_id=current_id,
                 department_id=data["department_id"],
                 title=data['title'],
-                description=data['description']
+                description=data['description'],
+                replied=False
             )
 
             new_query.save()
 
             return {
-                'message': 'Queries submitted successfully'
-            }, 200
+                     'message': 'Queries submitted successfully'
+                   }, 200
 
         except Exception as e:
             print(e)

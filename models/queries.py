@@ -6,4 +6,5 @@ class Queries(Document):
     department_id = StringField(required=True)
     title = StringField(required=True)
     description = StringField(required=True)
-
+    replied = BooleanField()
+    reply_text = StringField()

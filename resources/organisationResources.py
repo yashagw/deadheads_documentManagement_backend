@@ -6,7 +6,10 @@ from flask_restful import Resource
 
 from passlib.hash import pbkdf2_sha256 as sha256
 
+from models.citizens import Citizens
+from models.departmentCirculars import DepartmentCirculars
 from models.organisations import Organisations
+from models.queries import Queries
 from models.revokedTokens import RevokedTokens
 from utils.decorator import director_required
 
@@ -69,10 +72,10 @@ class OrganisationLogin(Resource):
             refresh_token = create_refresh_token(identity=str(current_organisation['id']), additional_claims={"roles": "director"})
 
             return {
-                'message': 'Logged in as {}'.format(current_organisation.director_name),
-                'access_token': access_token,
-                'refresh_token': refresh_token
-            }, 200
+                       'message': 'Logged in as {}'.format(current_organisation.director_name),
+                       'access_token': access_token,
+                       'refresh_token': refresh_token
+                   }, 200
         else:
             return {'message': 'Wrong credentials'}, 401
 
@@ -107,3 +110,47 @@ class OrganisationInfo(Resource):
             "logo": current_organisation["logo"],
             "banner": current_organisation["banner"],
         }
+
+
+class OrganisationStats(Resource):
+    @jwt_required()
+    @director_required
+    def get(self):
+        current_id = get_jwt_identity()
+        current_organisation = Organisations.objects(id=str(current_id)).first()
+
+        total_queries = Queries.objects()
+        unsolved_queries = Queries.objects(replied=False)
+        solved_queries = Queries.objects(replied=True)
+        registered_citizen = Citizens.objects()
+
+        return {
+            "total_queries": len(total_queries),
+            "unsolved_queries": len(unsolved_queries),
+            "solved_queries": len(solved_queries),
+            "no_of_citizen": len(registered_citizen),
+            "director_name": current_organisation["director_name"],
+        }
+
+
+class DepartmentCircularSubmit(Resource):
+    @jwt_required()
+    @director_required
+    def post(self):
+        data = request.get_json(force=True)
+
+        try:
+            new_circular = DepartmentCirculars(
+                title=data['title'],
+                description=data['description']
+            )
+
+            new_circular.save()
+
+            return {
+                'message': 'Departmental Circular created successfully'
+            }
+
+        except Exception as e:
+            print(f"Got error while creating departmental circulars -: {e}")
+            return {'message': 'Something went wrong'}, 500

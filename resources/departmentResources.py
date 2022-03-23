@@ -7,6 +7,7 @@ from flask_restful import Resource
 
 from passlib.hash import pbkdf2_sha256 as sha256
 
+import config
 from models.departments import Departments
 from models.members import Members
 from models.revokedTokens import RevokedTokens
@@ -109,24 +110,48 @@ class DepartmentInfo(Resource):
 
 class AllDepartment(Resource):
     def get(self):
-        all_department = Departments.objects(organisation_id="6236fd2b7d5d64f7fe581a75")
+        all_department = Departments.objects(organisation_id=config.MAIN_ORGANISATION_ID)
         all_department = json.loads(all_department.to_json())
 
         data = []
 
         for deparment in all_department:
+            deparment_id = deparment["_id"]["$oid"]
+
+            department_members = Members.objects(department_id=deparment_id)
+
             data.append({
                 "name": deparment["name"],
-                "id": deparment["_id"]["$oid"],
+                "id": deparment_id,
                 "tagline": deparment["tagline"],
                 "head_name": deparment["head_name"],
-                "email": deparment["email"]
+                "email": deparment["email"],
+                "no_of_members": len(department_members)
             })
 
         return {"data": data}, 200
 
 
 class DepartmentMembers(Resource):
+    @jwt_required()
+    @departmentHead_required
+    def get(self):
+        current_id = get_jwt_identity()
+        all_members = Members.objects(department_id=str(current_id))
+        all_members = json.loads(all_members.to_json())
+
+        data = []
+
+        for member in all_members:
+            data.append({
+                "name": member["name"],
+                "email": member["email"]
+            })
+
+        return {"data": data}
+
+
+class DepartmentApprovalList(Resource):
     @jwt_required()
     @departmentHead_required
     def get(self):

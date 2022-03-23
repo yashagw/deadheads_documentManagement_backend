@@ -1,0 +1,164 @@
+@import url('https://fonts.googleapis.com/css2?family=Montserrat:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&family=Noto+Sans:ital,wght@0,400;0,700;1,400;1,700&display=swap');
+
+*{
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Montserrat', sans-serif;
+}
+
+body{
+  background-color: white;
+  margin:0;
+  padding: 0;
+}
+
+.main{
+  width:80%;
+  margin: 0 auto;
+}
+
+.header{
+  height: 65px;
+  width:100%;
+  background-color: #EBF4FE;
+}
+
+.header > .main{
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.header  h1{
+  font-family: 'Noto Sans', sans-serif;
+  font-size: 22px;
+}
+
+.header   .links{
+
+}
+
+.header   .links   a{
+  text-decoration: none;
+  padding-left: 20px;
+  color: black;
+  font-weight: 500;
+  font-size: 13;
+}
+
+.body{
+  margin-top:80px;
+}
+
+.body .main{
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.body .left{
+  width: 50%;
+}
+
+.body .left .welcome{
+  background-color: #EBF4FE;
+  padding: 40px 40px;
+  border-radius: 5px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.body .left .welcome .top p{
+  font-size: 14px;
+  margin:10px 0;
+}
+
+.body .left .welcome .bottom{
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+}
+
+.body .left .welcome .blue, .body .left .welcome .white{
+    padding: 10px 20px;
+    text-align: center;
+    background-color: #1D3CC3;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 12px;
+} 
+
+.body .left .welcome .white{
+  margin-top: 20px;
+  background-color: white;
+  color: #1D3CC3;
+}
+
+.body .left .upload{
+  background-color: #EBF4FE;
+  height: 300px;
+  border:1px #1D3CC3 dotted;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.body .left .upload a{
+    padding: 10px 20px;
+    text-align: center;
+    background-color: #1D3CC3;
+    text-decoration: none;
+    color: white;
+    border-radius: 5px;
+    font-size: 16px;
+    font-weight: bold;
+    margin: 15px 0;
+}
+
+.body .left .upload h5{
+  color:grey;
+  font-weight: 400;
+}
+
+.body .left > h3{
+  margin:25px 0;
+}
+
+.body .right{
+  width: 45%;
+}
+
+.body .right h3{
+  margin-bottom: 25px;
+}
+
+.body .right .datalists{
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  grid-auto-rows: 230px;
+  column-gap: 10px;
+  row-gap: 10px;
+}
+
+.body .right .datalists .data{
+  background-color: #EBF4FE;
+  border:1px #1D3CC3;
+  padding: 30px;
+}
+
+.body .right .datalists .data h4{
+  color:grey;
+}
+
+.body .right .datalists .data h5{
+  font-size:26px;
+  font-weight: bold;
+  margin:20px 0;
+}

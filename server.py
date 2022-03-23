@@ -9,10 +9,10 @@ from models.revokedTokens import RevokedTokens
 default_config = {
     'MONGODB_SETTINGS': {
         'db': 'deadheads',
-        'host': 'localhost',
-        'port': 27017,
-        'username': '',
-        'password': ''
+        'host': '165.232.183.136',
+        'port': 2727,
+        'username': 'yashMongo',
+        'password': 'MongoChacha$123'
     },
     'JWT_SECRET_KEY': "dfasjfrijsa845238rfdugidgfj230498",
     'JWT_ACCESS_TOKEN_EXPIRES': 365 * 24 * 60 * 60,
@@ -73,6 +73,7 @@ api.add_resource(organisationResources.OrganisationRegistration, '/organisation/
 api.add_resource(organisationResources.OrganisationLogin, '/organisation/login')
 api.add_resource(organisationResources.OrganisationLogoutAccess, '/organisation/logout/access')
 api.add_resource(organisationResources.OrganisationInfo, '/organisation')
+api.add_resource(organisationResources.OrganisationStats, '/organisation/stats')
 
 api.add_resource(departmentResources.DepartmentRegistration, '/organisation/department/register')
 api.add_resource(departmentResources.DepartmentLogin, '/department/login')
@@ -85,6 +86,7 @@ api.add_resource(memberResources.MemberRegistration, '/department/member/registe
 api.add_resource(memberResources.MemberLogin, '/member/login')
 api.add_resource(memberResources.MemberLogoutAccess, '/member/logout/access')
 api.add_resource(memberResources.MemberInfo, '/member')
+api.add_resource(memberResources.ApprovalSubmit, '/member/approval')
 
 api.add_resource(citizenResources.CitizenRegistration, '/citizen/register')
 api.add_resource(citizenResources.CitizenLogin, '/citizen/login')
@@ -93,3 +95,4 @@ api.add_resource(citizenResources.CitizenInfo, '/citizen')
 api.add_resource(citizenResources.QuerySubmit, '/citizen/submitQuery')
 
 app.run(host='0.0.0.0')
+# app.run()
